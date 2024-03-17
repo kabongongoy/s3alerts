@@ -1,119 +1,7 @@
-# provider "aws" {
-#   region = "us-east-1"  # Change this to your desired region
-# }
+provider "aws" {
+  region = "us-east-1"  # Change this to your desired region
+}
 
-# # Create an S3 bucket
-# # resource "aws_s3_bucket" "example_bucket" {
-# #   bucket = "hf-lambda-notify"  # Change this to your desired bucket name
-# #   #acl    = "private"
-# # }
-
-
-# data "aws_s3_bucket" "selected" {
-#   bucket = var.bucketName
-# }
-
-# # Create an IAM role for Lambda function
-# resource "aws_iam_role" "lambda_execution_role" {
-#   name = "lambda_execution_role"
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [{
-#       Effect    = "Allow",
-#       Principal = {
-#         Service = "lambda.amazonaws.com"
-#       },
-#       Action    = "sts:AssumeRole"
-#     }]
-#   })
-
-#   # Attach policies for S3 read access
-#   // Add policies for SES or SMTP access if needed
-# }
-
-
-# resource "aws_iam_policy" "ses_send_email_policy" {
-#   name        = "SES_SendEmail_Policy"
-#   description = "Allows Lambda to send emails via SES"
-#   policy      = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Effect": "Allow",
-#       "Action": "ses:SendEmail",
-#       "Resource": "*"
-#     }
-#   ]
-# }
-# EOF
-# }
-
-# resource "aws_iam_role_policy_attachment" "lambda_ses_send_email_policy_attachment" {
-#   role       = aws_iam_role.lambda_execution_role.name
-#   policy_arn = aws_iam_policy.ses_send_email_policy.arn
-# }
-
-
-# # Attach an IAM policy to the role to allow Lambda to write CloudWatch logs
-# resource "aws_iam_policy_attachment" "lambda_cloudwatch_policy" {
-#   name       = "lambda_cloudwatch_policy"
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-#   roles      = [aws_iam_role.lambda_execution_role.name]
-# }
-
-# # Create Lambda function
-# resource "aws_lambda_function" "s3_download_notifier" {
-#   filename         = "${path.module}/lambda_function.zip"
-#   function_name    = "s3_download_notifier"
-#   role             = aws_iam_role.lambda_execution_role.arn
-#   handler          = "lambda_function.lambda_handler"
-#   runtime          = var.runtime
-#   #source_code_hash = filebase64sha256("lambda_function.zip")
-#   source_code_hash = data.archive_file.lambda_function_zip.output_base64sha256
-#   timeout          = 10
-
-#   environment {
-#     variables = {
-#       SENDER_EMAIL = var.sender_email
-#       RECEIVER_EMAIL = var.receiver_email
-#     }
-#   }
-# }
-
-# # Configure S3 event notification to trigger Lambda function on object download
-# resource "aws_lambda_permission" "allow_s3_invoke" {
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = aws_lambda_function.s3_download_notifier.arn
-#   principal     = "s3.amazonaws.com"
-
-#   source_arn = data.aws_s3_bucket.selected.arn
-# }
-
-# # Create CloudWatch log group for Lambda logs
-# resource "aws_cloudwatch_log_group" "lambda_log_group" {
-#   name              = "/aws/lambda/${var.function_name}-${var.bucketName}"
-#   retention_in_days = 14
-# }
-
-# # Create the Lambda function code zip file
-# data "archive_file" "lambda_function_zip" {
-#   type        = "zip"
-#   output_path = "${path.module}/lambda_function.zip"
-#   source_dir  = "${path.module}/functions/"
-
-# }
-
-# # Configure S3 event notification to trigger Lambda function on object download
-# resource "aws_s3_bucket_notification" "example_bucket_notification" {
-#   bucket = data.aws_s3_bucket.selected.id
-
-#   lambda_function {
-#     lambda_function_arn = aws_lambda_function.s3_download_notifier.arn
-#     events              = var.events
-#   }
-# }
 
 
 
@@ -126,5 +14,5 @@ module "aws_s3_bucket_monitoring" {
   events = var.events
   runtime = var.runtime
   create_bucket = var.create_bucket
-  slack_webhook_url = var.slack_webhook_url
 }
+

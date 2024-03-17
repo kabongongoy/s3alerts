@@ -33,11 +33,6 @@ variable "runtime" {
 }
 
 
-variable "slack_webhook_url" {
-  type = string
-  #default = "https://hooks.slack.com/services/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"
-}
-
 variable "create_bucket" {
   type = bool
   #default = false
