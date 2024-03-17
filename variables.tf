@@ -8,13 +8,13 @@ variable "bucketName" {
 variable "sender_email" {
   description = "Email address to use for the alert"
   type = string
-  default = "afaleye@gmail.com" 
+  default = "youremail@example.com" 
 }
 
 variable "receiver_email" {
   description = "Email address to forward the alert"
   type = string
-  default = "afaleye@gmail.com"    
+  default = "youremail@example.com"   
 }
 
 
